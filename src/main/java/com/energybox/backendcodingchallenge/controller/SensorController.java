@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +26,20 @@ import javax.validation.Valid;
 public class SensorController {
 
     private final SensorService sensorService;
+
+    /**
+     * Get Sensor by GatewayId and SensorId
+     *
+     * @param gatewayId
+     * @param sensorId
+     * @return Sensor
+     */
+    @ApiOperation(value = "Get Sensor", code = 200, response = Sensor.class)
+    @GetMapping("/{gatewayId}/sensors/{sensorId}")
+    public ResponseEntity<Sensor> get(@PathVariable Long gatewayId, @PathVariable Long sensorId) {
+        Sensor updated = sensorService.get(gatewayId, sensorId);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
 
     /**
      * Updates a sensor's metadata
@@ -71,6 +86,14 @@ public class SensorController {
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
+    /**
+     * Add a new Data node to the Sensor
+     *
+     * @param gatewayId
+     * @param sensorId
+     * @param sensorDataRequestView
+     * @return Sensor
+     */
     @ApiOperation(value = "Add a Sensor Data Node", code = 200, response = Sensor.class)
     @PutMapping("/{gatewayId}/sensors/{sensorId}/data")
     public ResponseEntity<Sensor> addData(@PathVariable Long gatewayId, @PathVariable Long sensorId, @Valid @RequestBody SensorDataRequestView sensorDataRequestView) {

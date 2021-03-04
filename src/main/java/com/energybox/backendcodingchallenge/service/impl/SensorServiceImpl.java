@@ -22,40 +22,41 @@ public class SensorServiceImpl implements SensorService {
     private final GatewayService gatewayService;
     private final SensorRepository sensorRepository;
 
+    @Transactional(readOnly = true)
+    public Sensor get(Long gatewayId, Long sensorId) {
+        Gateway gateway = gatewayService.get(gatewayId);
+        return gateway.getSensor(sensorId);
+    }
+
     @Transactional
     public Sensor update(Long gatewayId, Long sensorId, SensorRequestView sensorRequestView) {
-        Sensor sensorPersistent = getSensor(gatewayId, sensorId);
+        Sensor sensorPersistent = get(gatewayId, sensorId);
         sensorPersistent.setName(sensorRequestView.getName());
         return sensorRepository.save(sensorPersistent);
     }
 
     @Transactional
     public Sensor addType(Long gatewayId, Long sensorId, SensorType type) {
-        Sensor sensorPersistent = getSensor(gatewayId, sensorId);
+        Sensor sensorPersistent = get(gatewayId, sensorId);
         sensorPersistent.addSensorType(type);
         return sensorRepository.save(sensorPersistent);
     }
 
     @Transactional
     public Sensor removeType(Long gatewayId, Long sensorId, SensorType type) {
-        Sensor sensorPersistent = getSensor(gatewayId, sensorId);
+        Sensor sensorPersistent = get(gatewayId, sensorId);
         sensorPersistent.removeSensorType(type);
         return sensorRepository.save(sensorPersistent);
     }
 
     @Transactional
     public Sensor addData(Long gatewayId, Long sensorId, SensorDataRequestView sensorDataRequestView) {
-        Sensor sensorPersistent = getSensor(gatewayId, sensorId);
+        Sensor sensorPersistent = get(gatewayId, sensorId);
         sensorPersistent.addSensorData(SensorData.builder()
                 .unit(sensorDataRequestView.getUnit())
                 .value(sensorDataRequestView.getValue())
                 .timestamp(Instant.now())
                 .build());
         return sensorRepository.save(sensorPersistent);
-    }
-
-    private Sensor getSensor(Long gatewayId, Long sensorId) {
-        Gateway gateway = gatewayService.get(gatewayId);
-        return gateway.getSensor(sensorId);
     }
 }
