@@ -4,8 +4,8 @@ import com.energybox.backendcodingchallenge.node.Gateway;
 import com.energybox.backendcodingchallenge.node.Sensor;
 import com.energybox.backendcodingchallenge.repository.GatewayRepository;
 import com.energybox.backendcodingchallenge.service.GatewayService;
+import com.energybox.backendcodingchallenge.service.SensorService;
 import com.energybox.backendcodingchallenge.view.request.GatewayRequestView;
-import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ import java.util.Optional;
 public class GatewayServiceImpl implements GatewayService {
 
     private final GatewayRepository gatewayRepository;
+    private final SensorService sensorService;
 
     @Transactional
     public Gateway create(GatewayRequestView gatewayRequestView) {
@@ -26,13 +27,6 @@ public class GatewayServiceImpl implements GatewayService {
                 .name(gatewayRequestView.getName())
                 .dateCreated(Instant.now())
                 .build());
-    }
-
-    @Transactional(readOnly = true)
-    public Gateway get(Long gatewayId) {
-        Optional<Gateway> gateway = gatewayRepository.findById(gatewayId);
-        gateway.orElseThrow(() -> new RuntimeException("Gateway with id " + gatewayId + " not found."));
-        return gateway.get();
     }
 
     @Transactional
@@ -43,17 +37,27 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Transactional(readOnly = true)
+    public Gateway get(Long gatewayId) {
+        Optional<Gateway> gateway = gatewayRepository.findById(gatewayId);
+        gateway.orElseThrow(() -> new RuntimeException("Gateway with id " + gatewayId + " not found."));
+        return gateway.get();
+    }
+
+    @Transactional(readOnly = true)
     public List<Gateway> getAll() {
         return gatewayRepository.findAll();
     }
 
     @Transactional
-    public Gateway addSensor(Long gatewayId, SensorRequestView sensorRequestView) {
+    public void delete(Long gatewayId) {
+        gatewayRepository.deleteById(gatewayId);
+    }
+
+    @Transactional
+    public Gateway addSensor(Long gatewayId, Long sensorId) {
         Gateway gatewayPersistent = get(gatewayId);
-        gatewayPersistent.addSensor(Sensor.builder()
-                .name(sensorRequestView.getName())
-                .dateCreated(Instant.now())
-                .build());
+        Sensor sensor = sensorService.get(sensorId);
+        gatewayPersistent.addSensor(sensor);
         return gatewayRepository.save(gatewayPersistent);
     }
 

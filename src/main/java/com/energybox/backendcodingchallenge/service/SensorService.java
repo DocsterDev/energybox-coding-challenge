@@ -6,9 +6,11 @@ import com.energybox.backendcodingchallenge.view.request.SensorDataRequestView;
 import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 
 public interface SensorService {
-    Sensor get(Long gatewayId, Long sensorId);
-    Sensor update(Long gatewayId, Long sensorId, SensorRequestView sensorRequestView);
-    Sensor addType(Long gatewayId, Long sensorId, SensorType type);
-    Sensor removeType(Long gatewayId, Long sensorId, SensorType type);
-    Sensor addData(Long gatewayId, Long sensorId, SensorDataRequestView sensorDataRequestView);
+    Sensor get(Long sensorId);
+    Sensor create(SensorRequestView sensorRequestView);
+    Sensor update(Long sensorId, SensorRequestView sensorRequestView);
+    void delete(Long sensorId);
+    Sensor addType(Long sensorId, SensorType type);
+    Sensor removeType(Long sensorId, SensorType type);
+    Sensor addData(Long sensorId, SensorDataRequestView sensorDataRequestView);
 }
