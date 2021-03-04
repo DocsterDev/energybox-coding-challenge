@@ -1,4 +1,4 @@
-package com.energybox.backendcodingchallenge.domain;
+package com.energybox.backendcodingchallenge.node;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

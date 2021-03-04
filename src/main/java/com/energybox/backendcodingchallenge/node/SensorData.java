@@ -1,4 +1,4 @@
-package com.energybox.backendcodingchallenge.domain;
+package com.energybox.backendcodingchallenge.node;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

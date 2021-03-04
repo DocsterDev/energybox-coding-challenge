@@ -1,7 +1,7 @@
 package com.energybox.backendcodingchallenge.controller;
 
-import com.energybox.backendcodingchallenge.domain.Gateway;
-import com.energybox.backendcodingchallenge.domain.Sensor;
+import com.energybox.backendcodingchallenge.node.Gateway;
+import com.energybox.backendcodingchallenge.node.Sensor;
 import com.energybox.backendcodingchallenge.service.GatewayService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -105,5 +105,4 @@ public class GatewayController {
         gatewayService.removeSensor(gatewayId, sensorId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

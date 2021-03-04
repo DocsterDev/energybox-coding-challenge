@@ -1,7 +1,7 @@
 package com.energybox.backendcodingchallenge.service;
 
-import com.energybox.backendcodingchallenge.domain.Gateway;
-import com.energybox.backendcodingchallenge.domain.Sensor;
+import com.energybox.backendcodingchallenge.node.Gateway;
+import com.energybox.backendcodingchallenge.node.Sensor;
 
 import java.util.List;
 

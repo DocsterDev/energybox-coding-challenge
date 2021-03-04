@@ -1,4 +1,4 @@
-package com.energybox.backendcodingchallenge.domain;
+package com.energybox.backendcodingchallenge.node;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +18,14 @@ public class Gateway extends BaseNode {
     @Relationship(value = "CONNECTED_TO", direction = Relationship.Direction.INCOMING)
     private List<Sensor> sensors;
 
+    public Sensor getSensor(Long sensorId) {
+       return this.sensors
+               .stream()
+               .filter(sensor -> sensor.getId().equals(sensorId))
+               .findFirst()
+               .orElseThrow(() -> new RuntimeException("Sensor with id " + sensorId + " not found."));
+    }
+
     public void addSensor(Sensor sensor) {
         if (!ObjectUtils.isEmpty(sensor)) {
             this.sensors.add(sensor);
@@ -25,6 +33,7 @@ public class Gateway extends BaseNode {
     }
 
     public void removeSensor(Long sensorId) {
-        this.sensors.removeIf(sensor -> sensorId.equals(sensor.getId()));
+        this.sensors
+                .removeIf(sensor -> sensorId.equals(sensor.getId()));
     }
 }
