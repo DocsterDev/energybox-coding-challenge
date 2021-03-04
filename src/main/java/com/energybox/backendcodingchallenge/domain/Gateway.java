@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -18,8 +19,12 @@ public class Gateway extends BaseNode {
     private List<Sensor> sensors;
 
     public void addSensor(Sensor sensor) {
-        if (sensor != null) {
+        if (!ObjectUtils.isEmpty(sensor)) {
             this.sensors.add(sensor);
         }
+    }
+
+    public void removeSensor(Long sensorId) {
+        this.sensors.removeIf(sensor -> sensorId.equals(sensor.getId()));
     }
 }

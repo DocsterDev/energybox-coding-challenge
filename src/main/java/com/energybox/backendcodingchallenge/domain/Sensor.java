@@ -1,6 +1,7 @@
 package com.energybox.backendcodingchallenge.domain;
 
 import com.energybox.backendcodingchallenge.enums.SensorType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,12 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Sensor extends BaseNode {
+    private String name;
     @Relationship(value = "SENSOR_TYPE", direction = Relationship.Direction.INCOMING)
     private List<SensorType> types;
     @Relationship(value = "SENSOR_DATA", direction = Relationship.Direction.INCOMING)
     private List<SensorData> data;
-    @Relationship(value = "CONNECTED_TO", direction = Relationship.Direction.OUTGOING)
-    private Gateway gateway;
 
     public void addSensorType(SensorType type) {
         if (type != null) {

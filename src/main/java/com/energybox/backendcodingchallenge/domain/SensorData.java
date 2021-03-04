@@ -1,5 +1,6 @@
 package com.energybox.backendcodingchallenge.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.time.Instant;
 public class SensorData extends BaseNode {
     private Instant timestamp;
     private Double value;
+    @JsonIgnore
     @Relationship(value = "SENSOR_DATA", direction = Relationship.Direction.OUTGOING)
     private Sensor sensor;
 }
