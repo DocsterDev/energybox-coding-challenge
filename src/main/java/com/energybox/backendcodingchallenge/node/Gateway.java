@@ -32,7 +32,6 @@ public class Gateway extends BaseNode {
     }
 
     public void removeSensor(Long sensorId) {
-        // TODO - Set Connected to false - Make sure it does not delete the entity
         for (Sensor sensor: this.sensors) {
             if (sensorId.equals(sensor.getId())) {
                 sensor.setConnected(false);
