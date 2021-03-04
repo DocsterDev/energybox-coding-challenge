@@ -7,6 +7,8 @@ import com.energybox.backendcodingchallenge.enums.SensorType;
 import com.energybox.backendcodingchallenge.repository.SensorRepository;
 import com.energybox.backendcodingchallenge.service.GatewayService;
 import com.energybox.backendcodingchallenge.service.SensorService;
+import com.energybox.backendcodingchallenge.view.request.SensorDataRequestView;
+import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +23,9 @@ public class SensorServiceImpl implements SensorService {
     private final SensorRepository sensorRepository;
 
     @Transactional
-    public Sensor update(Long gatewayId, Long sensorId, Sensor sensor) {
+    public Sensor update(Long gatewayId, Long sensorId, SensorRequestView sensorRequestView) {
         Sensor sensorPersistent = getSensor(gatewayId, sensorId);
-        sensorPersistent.setName(sensor.getName());
+        sensorPersistent.setName(sensorRequestView.getName());
         return sensorRepository.save(sensorPersistent);
     }
 
@@ -42,10 +44,13 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Transactional
-    public Sensor addData(Long gatewayId, Long sensorId, SensorData data) {
+    public Sensor addData(Long gatewayId, Long sensorId, SensorDataRequestView sensorDataRequestView) {
         Sensor sensorPersistent = getSensor(gatewayId, sensorId);
-        data.setTimestamp(Instant.now());
-        sensorPersistent.addSensorData(data);
+        sensorPersistent.addSensorData(SensorData.builder()
+                .unit(sensorDataRequestView.getUnit())
+                .value(sensorDataRequestView.getValue())
+                .timestamp(Instant.now())
+                .build());
         return sensorRepository.save(sensorPersistent);
     }
 

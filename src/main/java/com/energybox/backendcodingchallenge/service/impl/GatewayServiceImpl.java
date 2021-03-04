@@ -4,10 +4,13 @@ import com.energybox.backendcodingchallenge.node.Gateway;
 import com.energybox.backendcodingchallenge.node.Sensor;
 import com.energybox.backendcodingchallenge.repository.GatewayRepository;
 import com.energybox.backendcodingchallenge.service.GatewayService;
+import com.energybox.backendcodingchallenge.view.request.GatewayRequestView;
+import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +21,11 @@ public class GatewayServiceImpl implements GatewayService {
     private final GatewayRepository gatewayRepository;
 
     @Transactional
-    public Gateway create(Gateway gateway) {
-        return gatewayRepository.save(gateway);
+    public Gateway create(GatewayRequestView gatewayRequestView) {
+        return gatewayRepository.save(Gateway.builder()
+                .name(gatewayRequestView.getName())
+                .dateCreated(Instant.now())
+                .build());
     }
 
     @Transactional(readOnly = true)
@@ -30,9 +36,9 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Transactional
-    public Gateway update(Long gatewayId, Gateway gateway) {
+    public Gateway update(Long gatewayId, GatewayRequestView gatewayRequestView) {
         Gateway gatewayPersistent = get(gatewayId);
-        gatewayPersistent.setName(gateway.getName());
+        gatewayPersistent.setName(gatewayRequestView.getName());
         return gatewayRepository.save(gatewayPersistent);
     }
 
@@ -42,9 +48,12 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Transactional
-    public Gateway addSensor(Long gatewayId, Sensor sensor) {
+    public Gateway addSensor(Long gatewayId, SensorRequestView sensorRequestView) {
         Gateway gatewayPersistent = get(gatewayId);
-        gatewayPersistent.addSensor(sensor);
+        gatewayPersistent.addSensor(Sensor.builder()
+                .name(sensorRequestView.getName())
+                .dateCreated(Instant.now())
+                .build());
         return gatewayRepository.save(gatewayPersistent);
     }
 

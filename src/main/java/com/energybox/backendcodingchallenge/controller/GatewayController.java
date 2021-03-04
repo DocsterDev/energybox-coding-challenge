@@ -1,8 +1,9 @@
 package com.energybox.backendcodingchallenge.controller;
 
 import com.energybox.backendcodingchallenge.node.Gateway;
-import com.energybox.backendcodingchallenge.node.Sensor;
 import com.energybox.backendcodingchallenge.service.GatewayService;
+import com.energybox.backendcodingchallenge.view.request.GatewayRequestView;
+import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,14 +30,13 @@ public class GatewayController {
     /**
      * Create a new Gateway
      *
-     * @param gateway
+     * @param gatewayRequestView
      * @return Gateway
      */
     @ApiOperation(value = "Create a Gateway", code = 201, response = Gateway.class)
     @PostMapping
-    public ResponseEntity<Gateway> create(@RequestBody Gateway gateway) {
-        // TODO - Validate name is present (make a view object)
-        Gateway created = gatewayService.create(gateway);
+    public ResponseEntity<Gateway> create(@Valid @RequestBody GatewayRequestView gatewayRequestView) {
+        Gateway created = gatewayService.create(gatewayRequestView);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -43,13 +44,13 @@ public class GatewayController {
      * Update existing Gateway
      *
      * @param gatewayId
-     * @param gateway
+     * @param gatewayRequestView
      * @return Gateway
      */
     @ApiOperation(value = "Update Gateway Metadata", code = 200, response = Gateway.class)
     @PutMapping("/{gatewayId}")
-    public ResponseEntity<Gateway> update(@PathVariable Long gatewayId, @RequestBody Gateway gateway) {
-        Gateway updated = gatewayService.update(gatewayId, gateway);
+    public ResponseEntity<Gateway> update(@PathVariable Long gatewayId, @Valid @RequestBody GatewayRequestView gatewayRequestView) {
+        Gateway updated = gatewayService.update(gatewayId, gatewayRequestView);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
@@ -82,13 +83,13 @@ public class GatewayController {
      * Add a Sensor to an existing Gateway
      *
      * @param gatewayId
-     * @param sensor
+     * @param sensorRequestView
      * @return Gateway
      */
     @ApiOperation(value = "Add a Sensor to a Gateway", code = 201, response = Gateway.class)
     @PutMapping("/{gatewayId}/sensors")
-    public ResponseEntity<Gateway> addSensor(@PathVariable Long gatewayId, @RequestBody Sensor sensor) {
-        Gateway gateway = gatewayService.addSensor(gatewayId, sensor);
+    public ResponseEntity<Gateway> addSensor(@PathVariable Long gatewayId, @Valid @RequestBody SensorRequestView sensorRequestView) {
+        Gateway gateway = gatewayService.addSensor(gatewayId, sensorRequestView);
         return new ResponseEntity<>(gateway, HttpStatus.CREATED);
     }
 
@@ -97,12 +98,12 @@ public class GatewayController {
      *
      * @param gatewayId
      * @param sensorId
-     * @return Void
+     * @return Gateway
      */
-    @ApiOperation(value = "Remove a Sensor from a Gateway", code = 200)
+    @ApiOperation(value = "Remove a Sensor from a Gateway", code = 200, response = Gateway.class)
     @DeleteMapping("/{gatewayId}/sensors/{sensorId}")
-    public ResponseEntity<Void> removeSensor(@PathVariable Long gatewayId, @PathVariable Long sensorId) {
-        gatewayService.removeSensor(gatewayId, sensorId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Gateway> removeSensor(@PathVariable Long gatewayId, @PathVariable Long sensorId) {
+        Gateway gateway = gatewayService.removeSensor(gatewayId, sensorId);
+        return new ResponseEntity<>(gateway, HttpStatus.OK);
     }
 }
