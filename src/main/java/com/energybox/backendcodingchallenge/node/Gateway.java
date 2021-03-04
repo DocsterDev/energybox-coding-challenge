@@ -25,15 +25,19 @@ public class Gateway extends BaseNode {
     private List<Sensor> sensors;
 
     public void addSensor(Sensor sensor) {
-        // TODO - Set Connected to true
         if (!ObjectUtils.isEmpty(sensor)) {
+            sensor.setConnected(true);
             this.sensors.add(sensor);
         }
     }
 
     public void removeSensor(Long sensorId) {
-        // TODO - Set Connected to false
-        this.sensors
-                .removeIf(sensor -> sensorId.equals(sensor.getId()));
+        // TODO - Set Connected to false - Make sure it does not delete the entity
+        for (Sensor sensor: this.sensors) {
+            if (sensorId.equals(sensor.getId())) {
+                sensor.setConnected(false);
+                this.sensors.remove(sensor);
+            }
+        }
     }
 }
