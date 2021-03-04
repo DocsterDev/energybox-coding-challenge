@@ -99,7 +99,7 @@ public class GatewayController {
      * @return Gateway
      */
     @ApiOperation(value = "Add a Sensor to a Gateway", code = 200, response = Gateway.class)
-    @PostMapping("/{gatewayId}/sensors/{sensorId}")
+    @PutMapping("/{gatewayId}/sensors/{sensorId}")
     public ResponseEntity<Gateway> addSensor(@PathVariable Long gatewayId, @PathVariable Long sensorId) {
         Gateway gateway = gatewayService.addSensor(gatewayId, sensorId);
         return new ResponseEntity<>(gateway, HttpStatus.OK);

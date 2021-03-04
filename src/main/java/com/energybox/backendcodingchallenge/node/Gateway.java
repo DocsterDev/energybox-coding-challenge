@@ -26,17 +26,11 @@ public class Gateway extends BaseNode {
 
     public void addSensor(Sensor sensor) {
         if (!ObjectUtils.isEmpty(sensor)) {
-            sensor.setConnected(true);
             this.sensors.add(sensor);
         }
     }
 
     public void removeSensor(Long sensorId) {
-        for (Sensor sensor: this.sensors) {
-            if (sensorId.equals(sensor.getId())) {
-                sensor.setConnected(false);
-                this.sensors.remove(sensor);
-            }
-        }
+        this.sensors.removeIf(sensor -> sensorId.equals(sensor.getId()));
     }
 }

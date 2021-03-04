@@ -24,7 +24,6 @@ import java.util.Set;
 public class Sensor extends BaseNode {
     private String name;
     private Instant dateCreated;
-    private boolean connected;
     @Relationship(value = "SENSOR_TYPE", direction = Relationship.Direction.INCOMING)
     private Set<SensorType> types;
     @Relationship(value = "SENSOR_DATA", direction = Relationship.Direction.INCOMING)
