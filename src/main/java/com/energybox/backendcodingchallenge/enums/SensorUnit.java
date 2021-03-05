@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum SensorUnit {
-    CELSIUS, PERCENTAGE, VOLTS
+    CELSIUS, PERCENTAGE, VOLTS, G
 }

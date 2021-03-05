@@ -4,7 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum SensorType {
-    HUMIDITY(SensorUnit.PERCENTAGE), TEMPERATURE(SensorUnit.CELSIUS), ELECTRICITY(SensorUnit.VOLTS);
+    HUMIDITY(SensorUnit.PERCENTAGE),
+    TEMPERATURE(SensorUnit.CELSIUS),
+    ELECTRICITY(SensorUnit.VOLTS),
+    ACCELEROMETER(SensorUnit.G);
 
     public final SensorUnit unit;
 

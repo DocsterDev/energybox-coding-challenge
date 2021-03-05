@@ -57,7 +57,7 @@ Try to complete the user stories below as best you can, and feel free to add in 
 
 Bonus:
 
-- Sensors can have a last_reading for each sensor type. The last_reading consists of a timestamp and a value.
+- Sensors can have a last_reading for each sensor type. The last_reading consists of a timestamp and a value. - Done
 
-- As a user I'd like to query all of the existing last_readings of a given sensor.
+- As a user I'd like to query all of the existing last_readings of a given sensor. - Done
 
