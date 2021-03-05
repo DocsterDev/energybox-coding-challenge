@@ -45,7 +45,7 @@ public class GatewayController {
             gateway = gatewayService.create(gatewayRequestView);
         } catch (Exception e) {
             log.error("Error creating gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error creating gateway", e);
+            throw new RuntimeException("Error creating gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(gateway, HttpStatus.CREATED);
     }
@@ -67,7 +67,7 @@ public class GatewayController {
             updated = gatewayService.update(gatewayId, gatewayRequestView);
         } catch (Exception e) {
             log.error("Error updating gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error updating gateway", e);
+            throw new RuntimeException("Error updating gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class GatewayController {
             }
         } catch (Exception e) {
             log.error("Error fetching gateways by sensor type: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error fetching gateways by sensor type", e);
+            throw new RuntimeException("Error fetching gateways by sensor type: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(gateways, HttpStatus.OK);
     }
@@ -110,7 +110,7 @@ public class GatewayController {
             gateway = gatewayService.get(gatewayId);
         } catch (Exception e) {
             log.error("Error fetching gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error fetching gateway", e);
+            throw new RuntimeException("Error fetching gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(gateway, HttpStatus.OK);
     }
@@ -128,7 +128,7 @@ public class GatewayController {
             gatewayService.delete(gatewayId);
         } catch (Exception e) {
             log.error("Error deleting gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error deleting gateway", e);
+            throw new RuntimeException("Error deleting gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -148,7 +148,7 @@ public class GatewayController {
             gateway = gatewayService.addSensor(gatewayId, sensorId);
         } catch (Exception e) {
             log.error("Error adding sensor to gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error adding sensor to gateway", e);
+            throw new RuntimeException("Error adding sensor to gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(gateway, HttpStatus.OK);
     }
@@ -168,7 +168,7 @@ public class GatewayController {
             gateway = gatewayService.removeSensor(gatewayId, sensorId);
         } catch (Exception e) {
             log.error("Error removing sensor from gateway: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error removing sensor from gateway", e);
+            throw new RuntimeException("Error removing sensor from gateway: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(gateway, HttpStatus.OK);
     }

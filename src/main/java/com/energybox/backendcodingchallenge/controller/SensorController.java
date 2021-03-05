@@ -49,7 +49,7 @@ public class SensorController {
             sensor = sensorService.create(sensorRequestView);
         } catch (Exception e) {
             log.error("Error creating sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error creating sensor", e);
+            throw new RuntimeException("Error creating sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.CREATED);
     }
@@ -71,7 +71,7 @@ public class SensorController {
             sensor = sensorService.update(sensorId, sensorRequestView);
         } catch (Exception e) {
             log.error("Error updating sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error updating sensor", e);
+            throw new RuntimeException("Error updating sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ public class SensorController {
             }
         } catch (Exception e) {
             log.error("Error fetching sensors: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error fetching sensors", e);
+            throw new RuntimeException("Error fetching sensors: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensors, HttpStatus.OK);
     }
@@ -113,7 +113,7 @@ public class SensorController {
             sensor = sensorService.get(sensorId);
         } catch (Exception e) {
             log.error("Error fetching sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error fetching sensor", e);
+            throw new RuntimeException("Error fetching sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -131,7 +131,7 @@ public class SensorController {
             sensorService.delete(sensorId);
         } catch (Exception e) {
             log.error("Error deleting sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error deleting sensor", e);
+            throw new RuntimeException("Error deleting sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -151,7 +151,7 @@ public class SensorController {
             sensor = sensorService.addType(sensorId, type);
         } catch (Exception e) {
             log.error("Error adding sensor type to sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error adding sensor type to sensor", e);
+            throw new RuntimeException("Error adding sensor type to sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -171,7 +171,7 @@ public class SensorController {
             sensor = sensorService.removeType(sensorId, type);
         } catch (Exception e) {
             log.error("Error removing sensor type from sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error removing sensor type from sensor", e);
+            throw new RuntimeException("Error removing sensor type from sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -191,7 +191,7 @@ public class SensorController {
             sensor = sensorService.addData(sensorId, sensorDataRequestView);
         } catch (Exception e) {
             log.error("Error adding data node to sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error adding data node to sensor", e);
+            throw new RuntimeException("Error adding data node to sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -213,7 +213,7 @@ public class SensorController {
             sensorData = sensorService.getData(sensorId, direction);
         } catch (Exception e) {
             log.error("Error getting sensor data from sensor: {}", e.getLocalizedMessage());
-            throw new RuntimeException("Error getting sensor data from sensor", e);
+            throw new RuntimeException("Error getting sensor data from sensor: " + e.getLocalizedMessage(), e);
         }
         return new ResponseEntity<>(sensorData, HttpStatus.OK);
     }
