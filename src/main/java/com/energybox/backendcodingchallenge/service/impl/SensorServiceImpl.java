@@ -1,6 +1,7 @@
 package com.energybox.backendcodingchallenge.service.impl;
 
 import com.energybox.backendcodingchallenge.enums.SensorType;
+import com.energybox.backendcodingchallenge.enums.SortDirection;
 import com.energybox.backendcodingchallenge.node.Sensor;
 import com.energybox.backendcodingchallenge.node.SensorData;
 import com.energybox.backendcodingchallenge.repository.SensorRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -95,5 +97,16 @@ public class SensorServiceImpl implements SensorService {
                 .timestamp(Instant.now())
                 .build());
         return sensorRepository.save(sensorPersistent);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SensorData> getData(Long sensorId, SortDirection direction) {
+        log.info("Fetching Sensor Data from Sensor with id: {} with sort direction: {}", sensorId, direction);
+        Sensor sensorPersistent = get(sensorId);
+        return sensorPersistent.getData()
+                .stream()
+                .sorted(SortDirection.ACS.equals(direction) ? Comparator.comparing(SensorData::getTimestamp) :
+                        Comparator.comparing(SensorData::getTimestamp).reversed())
+                .collect(Collectors.toList());
     }
 }

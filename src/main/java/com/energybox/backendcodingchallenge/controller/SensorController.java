@@ -1,7 +1,9 @@
 package com.energybox.backendcodingchallenge.controller;
 
 import com.energybox.backendcodingchallenge.enums.SensorType;
+import com.energybox.backendcodingchallenge.enums.SortDirection;
 import com.energybox.backendcodingchallenge.node.Sensor;
+import com.energybox.backendcodingchallenge.node.SensorData;
 import com.energybox.backendcodingchallenge.service.SensorService;
 import com.energybox.backendcodingchallenge.view.request.SensorDataRequestView;
 import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
@@ -10,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -132,16 +135,33 @@ public class SensorController {
     }
 
     /**
-     * Add a new Data node to the Sensor
+     * Add a Data Node to a Sensor
      *
      * @param sensorId
      * @param sensorDataRequestView
      * @return Sensor
      */
-    @ApiOperation(value = "Add a Sensor Data Node", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Add a Data Node to a Sensor", code = 200, response = Sensor.class)
     @PutMapping("/{sensorId}/data")
     public ResponseEntity<Sensor> addData(@PathVariable Long sensorId, @Valid @RequestBody SensorDataRequestView sensorDataRequestView) {
         Sensor sensor = sensorService.addData(sensorId, sensorDataRequestView);
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
+
+    /**
+     * Get Sensor Data from Sensor
+     *
+     * @param sensorId
+     * @param direction - Data sort direction, must be either "ASC" or "DESC"
+     * @return Sensor
+     */
+    @ApiOperation(value = "Get Sensor Data from Sensor", code = 200, response = List.class)
+    @GetMapping("/{sensorId}/data")
+    public ResponseEntity<List<SensorData>> getLatestDataNode(
+            @PathVariable Long sensorId,
+            @RequestParam(required = false, defaultValue = "DESC") SortDirection direction) {
+        List<SensorData> sensorData = sensorService.getData(sensorId, direction);
+        return new ResponseEntity<>(sensorData, HttpStatus.OK);
+    }
+
 }
