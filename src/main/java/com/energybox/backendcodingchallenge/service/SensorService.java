@@ -1,8 +1,8 @@
 package com.energybox.backendcodingchallenge.service;
 
+import com.energybox.backendcodingchallenge.enums.SensorType;
 import com.energybox.backendcodingchallenge.enums.SortDirection;
 import com.energybox.backendcodingchallenge.node.Sensor;
-import com.energybox.backendcodingchallenge.enums.SensorType;
 import com.energybox.backendcodingchallenge.node.SensorData;
 import com.energybox.backendcodingchallenge.view.request.SensorDataRequestView;
 import com.energybox.backendcodingchallenge.view.request.SensorRequestView;

@@ -9,6 +9,7 @@ import com.energybox.backendcodingchallenge.view.request.SensorDataRequestView;
 import com.energybox.backendcodingchallenge.view.request.SensorRequestView;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/sensors")
@@ -34,132 +36,185 @@ public class SensorController {
     private final SensorService sensorService;
 
     /**
-     * Create a Sensor
+     * Create sensor
      *
      * @param sensorRequestView
      * @return Sensor
      */
-    @ApiOperation(value = "Create a Sensor", code = 201, response = Sensor.class)
+    @ApiOperation(value = "Create sensor", code = 201, response = Sensor.class)
     @PostMapping
     public ResponseEntity<Sensor> create(@Valid @RequestBody SensorRequestView sensorRequestView) {
-        Sensor sensor = sensorService.create(sensorRequestView);
+        Sensor sensor;
+        try {
+            sensor = sensorService.create(sensorRequestView);
+        } catch (Exception e) {
+            log.error("Error creating sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error creating sensor", e);
+        }
         return new ResponseEntity<>(sensor, HttpStatus.CREATED);
     }
 
     /**
-     * Updates a sensor's metadata
+     * Update sensor
      *
      * @param sensorId
      * @param sensorRequestView
      * @return Sensor
      */
-    @ApiOperation(value = "Update Sensor Metadata", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Update sensor", code = 200, response = Sensor.class)
     @PutMapping("/{sensorId}")
-    public ResponseEntity<Sensor> update(@PathVariable Long sensorId, @Valid @RequestBody SensorRequestView sensorRequestView) {
-        Sensor updated = sensorService.update(sensorId, sensorRequestView);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    public ResponseEntity<Sensor> update(
+            @PathVariable Long sensorId,
+            @Valid @RequestBody SensorRequestView sensorRequestView) {
+        Sensor sensor;
+        try {
+            sensor = sensorService.update(sensorId, sensorRequestView);
+        } catch (Exception e) {
+            log.error("Error updating sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error updating sensor", e);
+        }
+        return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
     /**
-     * Get all Sensors. If Type is present, will search by Sensor type
+     * Get all sensors
      *
      * @param type
      * @return List<Sensor>
      */
-    @ApiOperation(value = "Get all Sensors. If Type is present, will search by Sensor type", code = 200, response = List.class)
+    @ApiOperation(value = "Get all sensors", code = 200, response = List.class)
     @GetMapping
     public ResponseEntity<List<Sensor>> getAll(@RequestParam(required = false) SensorType type) {
         List<Sensor> sensors;
-        if (ObjectUtils.isEmpty(type)) {
-            sensors = sensorService.getAll();
-        } else {
-            sensors = sensorService.getByType(type);
+        try {
+            if (ObjectUtils.isEmpty(type)) {
+                sensors = sensorService.getAll();
+            } else {
+                sensors = sensorService.getByType(type);
+            }
+        } catch (Exception e) {
+            log.error("Error fetching sensors: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error fetching sensors", e);
         }
         return new ResponseEntity<>(sensors, HttpStatus.OK);
     }
 
     /**
-     * Get Sensor by GatewayId and SensorId
+     * Get sensor
      *
      * @param sensorId Sensor ID
      * @return Sensor
      */
-    @ApiOperation(value = "Get Sensor", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Get sensor", code = 200, response = Sensor.class)
     @GetMapping("/{sensorId}")
     public ResponseEntity<Sensor> get(@PathVariable Long sensorId) {
-        Sensor updated = sensorService.get(sensorId);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        Sensor sensor;
+        try {
+            sensor = sensorService.get(sensorId);
+        } catch (Exception e) {
+            log.error("Error fetching sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error fetching sensor", e);
+        }
+        return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
     /**
-     * Delete a Sensor
+     * Delete sensor
      *
      * @param sensorId
      * @return Void
      */
-    @ApiOperation(value = "Delete a Sensor", code = 200)
+    @ApiOperation(value = "Delete sensor", code = 200)
     @DeleteMapping("/{sensorId}")
     public ResponseEntity<Void> delete(@PathVariable Long sensorId) {
-        sensorService.delete(sensorId);
+        try {
+            sensorService.delete(sensorId);
+        } catch (Exception e) {
+            log.error("Error deleting sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error deleting sensor", e);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * Adds a Sensor Type to the SensorType enum list
+     * Add sensor type to sensor
      *
      * @param sensorId
      * @param type
      * @return Sensor
      */
-    @ApiOperation(value = "Add a Sensor type", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Add sensor type to sensor", code = 200, response = Sensor.class)
     @PatchMapping("/{sensorId}/type")
     public ResponseEntity<Sensor> addType(@PathVariable Long sensorId, @RequestBody SensorType type) {
-        Sensor sensor = sensorService.addType(sensorId, type);
+        Sensor sensor;
+        try {
+            sensor = sensorService.addType(sensorId, type);
+        } catch (Exception e) {
+            log.error("Error adding sensor type to sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error adding sensor type to sensor", e);
+        }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
     /**
-     * Removes a Sensor Type from the enum list
+     * Removes sensor type from sensor
      *
      * @param sensorId
      * @param type
      * @return Sensor
      */
-    @ApiOperation(value = "Remove a Sensor type", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Removes sensor type from sensor", code = 200, response = Sensor.class)
     @DeleteMapping("/{sensorId}/type")
     public ResponseEntity<Sensor> removeType(@PathVariable Long sensorId, @RequestBody SensorType type) {
-        Sensor sensor = sensorService.removeType(sensorId, type);
+        Sensor sensor;
+        try {
+            sensor = sensorService.removeType(sensorId, type);
+        } catch (Exception e) {
+            log.error("Error removing sensor type from sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error removing sensor type from sensor", e);
+        }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
     /**
-     * Add a Data Node to a Sensor
+     * Add data node to sensor
      *
      * @param sensorId
      * @param sensorDataRequestView
      * @return Sensor
      */
-    @ApiOperation(value = "Add a Data Node to a Sensor", code = 200, response = Sensor.class)
+    @ApiOperation(value = "Add data node to sensor", code = 200, response = Sensor.class)
     @PutMapping("/{sensorId}/data")
     public ResponseEntity<Sensor> addData(@PathVariable Long sensorId, @Valid @RequestBody SensorDataRequestView sensorDataRequestView) {
-        Sensor sensor = sensorService.addData(sensorId, sensorDataRequestView);
+        Sensor sensor;
+        try {
+            sensor = sensorService.addData(sensorId, sensorDataRequestView);
+        } catch (Exception e) {
+            log.error("Error adding data node to sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error adding data node to sensor", e);
+        }
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
 
     /**
-     * Get Sensor Data from Sensor
+     * Get sensor data from sensor
      *
      * @param sensorId
      * @param direction - Data sort direction, must be either "ASC" or "DESC"
      * @return Sensor
      */
-    @ApiOperation(value = "Get Sensor Data from Sensor", code = 200, response = List.class)
+    @ApiOperation(value = "Get sensor data from sensor", code = 200, response = List.class)
     @GetMapping("/{sensorId}/data")
     public ResponseEntity<List<SensorData>> getLatestDataNode(
             @PathVariable Long sensorId,
             @RequestParam(required = false, defaultValue = "DESC") SortDirection direction) {
-        List<SensorData> sensorData = sensorService.getData(sensorId, direction);
+        List<SensorData> sensorData;
+        try {
+            sensorData = sensorService.getData(sensorId, direction);
+        } catch (Exception e) {
+            log.error("Error getting sensor data from sensor: {}", e.getLocalizedMessage());
+            throw new RuntimeException("Error getting sensor data from sensor", e);
+        }
         return new ResponseEntity<>(sensorData, HttpStatus.OK);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.energybox.backendcodingchallenge.node;
 
 import com.energybox.backendcodingchallenge.enums.SensorType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Sensor extends BaseNode {
     private String name;
     private Instant dateCreated;

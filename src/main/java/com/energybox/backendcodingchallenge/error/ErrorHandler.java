@@ -13,9 +13,9 @@ import java.net.HttpURLConnection;
 @ControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {
 
-//    @ExceptionHandler({ Exception.class })
-//    public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
-//        Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR, HttpURLConnection.HTTP_INTERNAL_ERROR, ex.getLocalizedMessage());
-//        return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
-//    }
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
+        Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR, HttpURLConnection.HTTP_INTERNAL_ERROR, ex.getLocalizedMessage());
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
+    }
 }
