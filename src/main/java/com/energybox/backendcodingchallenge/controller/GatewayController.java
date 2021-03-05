@@ -1,5 +1,6 @@
 package com.energybox.backendcodingchallenge.controller;
 
+import com.energybox.backendcodingchallenge.enums.SensorType;
 import com.energybox.backendcodingchallenge.node.Gateway;
 import com.energybox.backendcodingchallenge.service.GatewayService;
 import com.energybox.backendcodingchallenge.view.request.GatewayRequestView;
@@ -7,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -67,14 +70,21 @@ public class GatewayController {
     }
 
     /**
-     * Fetch all existing Gateways
+     * Fetch all Gateways by Sensor Type
      *
+     * @param type
      * @return List<Gateway>
      */
-    @ApiOperation(value = "Fetch all Gateways", code = 200, response = List.class)
+    @ApiOperation(value = "Fetch all Gateways by Sensor Type", code = 200, response = List.class)
     @GetMapping
-    public ResponseEntity<List<Gateway>> getAll() {
-        List<Gateway> gateways = gatewayService.getAll();
+    public ResponseEntity<List<Gateway>> getAllBySensorsType(
+            @RequestParam(required = false) SensorType type) {
+        List<Gateway> gateways;
+        if (ObjectUtils.isEmpty(type)) {
+            gateways = gatewayService.getAll();
+        } else {
+            gateways = gatewayService.getAllBySensorType(type);
+        }
         return new ResponseEntity<>(gateways, HttpStatus.OK);
     }
 

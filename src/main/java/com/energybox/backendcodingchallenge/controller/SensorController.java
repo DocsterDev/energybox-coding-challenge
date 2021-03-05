@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,9 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -27,19 +31,6 @@ import javax.validation.Valid;
 public class SensorController {
 
     private final SensorService sensorService;
-
-    /**
-     * Get Sensor by GatewayId and SensorId
-     *
-     * @param sensorId Sensor ID
-     * @return Sensor
-     */
-    @ApiOperation(value = "Get Sensor", code = 200, response = Sensor.class)
-    @GetMapping("/{sensorId}")
-    public ResponseEntity<Sensor> get(@PathVariable Long sensorId) {
-        Sensor updated = sensorService.get(sensorId);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
-    }
 
     /**
      * Create a Sensor
@@ -65,6 +56,37 @@ public class SensorController {
     @PutMapping("/{sensorId}")
     public ResponseEntity<Sensor> update(@PathVariable Long sensorId, @Valid @RequestBody SensorRequestView sensorRequestView) {
         Sensor updated = sensorService.update(sensorId, sensorRequestView);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    /**
+     * Get all Sensors. If Type is present, will search by Sensor type
+     *
+     * @param type
+     * @return List<Sensor>
+     */
+    @ApiOperation(value = "Get all Sensors. If Type is present, will search by Sensor type", code = 200, response = List.class)
+    @GetMapping
+    public ResponseEntity<List<Sensor>> getAll(@RequestParam(required = false) SensorType type) {
+        List<Sensor> sensors;
+        if (ObjectUtils.isEmpty(type)) {
+            sensors = sensorService.getAll();
+        } else {
+            sensors = sensorService.getByType(type);
+        }
+        return new ResponseEntity<>(sensors, HttpStatus.OK);
+    }
+
+    /**
+     * Get Sensor by GatewayId and SensorId
+     *
+     * @param sensorId Sensor ID
+     * @return Sensor
+     */
+    @ApiOperation(value = "Get Sensor", code = 200, response = Sensor.class)
+    @GetMapping("/{sensorId}")
+    public ResponseEntity<Sensor> get(@PathVariable Long sensorId) {
+        Sensor updated = sensorService.get(sensorId);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
