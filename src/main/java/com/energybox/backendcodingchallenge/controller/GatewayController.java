@@ -62,14 +62,14 @@ public class GatewayController {
     public ResponseEntity<Gateway> update(
             @PathVariable Long gatewayId,
             @Valid @RequestBody GatewayRequestView gatewayRequestView) {
-        Gateway updated;
+        Gateway gateway;
         try {
-            updated = gatewayService.update(gatewayId, gatewayRequestView);
+            gateway = gatewayService.update(gatewayId, gatewayRequestView);
         } catch (Exception e) {
             log.error("Error updating gateway: {}", e.getLocalizedMessage());
             throw new RuntimeException("Error updating gateway: " + e.getLocalizedMessage(), e);
         }
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        return new ResponseEntity<>(gateway, HttpStatus.OK);
     }
 
     /**
