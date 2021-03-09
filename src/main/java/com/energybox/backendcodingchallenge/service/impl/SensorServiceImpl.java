@@ -32,7 +32,6 @@ public class SensorServiceImpl implements SensorService {
         log.info("Creating a new Sensor with name: {}", sensorRequestView.getName());
         return sensorRepository.save(Sensor.builder()
                 .name(sensorRequestView.getName())
-                .dateCreated(Instant.now())
                 .build());
     }
 

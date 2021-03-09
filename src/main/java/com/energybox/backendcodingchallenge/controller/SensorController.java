@@ -205,7 +205,7 @@ public class SensorController {
      */
     @ApiOperation(value = "Get sensor data from sensor", code = 200, response = List.class)
     @GetMapping("/{sensorId}/data")
-    public ResponseEntity<List<SensorData>> getLatestDataNode(
+    public ResponseEntity<List<SensorData>> getData(
             @PathVariable Long sensorId,
             @RequestParam(required = false, defaultValue = "DESC") SortDirection direction) {
         List<SensorData> sensorData;
