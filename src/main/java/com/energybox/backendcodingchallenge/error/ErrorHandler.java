@@ -19,4 +19,6 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
         Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR, HttpURLConnection.HTTP_INTERNAL_ERROR, ex.getLocalizedMessage());
         return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
     }
+
+
 }

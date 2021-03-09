@@ -33,7 +33,7 @@ public class GatewayServiceImpl implements GatewayService {
         log.info("Creating a new Gateway wth name: {}", gatewayRequestView.getName());
         return gatewayRepository.save(Gateway.builder()
                 .name(gatewayRequestView.getName())
-                .dateCreated(Instant.now())
+                .dateCreated(gatewayRequestView.getDateCreated())
                 .build());
     }
 
